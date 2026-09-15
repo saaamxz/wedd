@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewData["Title"] = "Admin Login";
+}
+
+<div class="admin-login-page">
+
+    <div class="admin-login-card">
+
+        <div class="login-monogram">
+            S
+            <span>&</span>
+            ?
+        </div>
+
+        <div class="login-label">
+            WEDDING MANAGEMENT
+        </div>
+
+        <h1>
+            Admin Login
+        </h1>
+
+        <p class="login-description">
+            Sign in to manage your wedding RSVPs.
+        </p>
+
+
+        @if (TempData["LoginError"] != null)
+        {
+            <div class="login-error">
+                @TempData["LoginError"]
+            </div>
+        }
+
+
+        <form asp-controller="Admin"
+              asp-action="Login"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+
+            <div class="login-field">
+
+                <label>
+                    Username
+                </label>
+
+                <input type="text"
+                       name="username"
+                       placeholder="Enter username"
+                       autocomplete="username"
+                       required />
+
+            </div>
+
+
+            <div class="login-field">
+
+                <label>
+                    Password
+                </label>
+
+                <input type="password"
+                       name="password"
+                       placeholder="Enter password"
+                       autocomplete="current-password"
+                       required />
+
+            </div>
+
+
+            <button type="submit"
+                    class="login-button">
+
+                <span>
+                    Sign In
+                </span>
+
+                <span>
+                    →
+                </span>
+
+            </button>
+
+        </form>
+
+
+        <a href="/"
+           class="login-back">
+
+            ← Back to invitation
+
+        </a>
+
+    </div>
+
+</div>

@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Elegant Wedding</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Main Website CSS -->
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <!-- Wedding Theme -->
+    <link rel="stylesheet"
+          href="~/css/wedding.css"
+          asp-append-version="true" />
+
+    <!-- Project Generated CSS -->
+    <link rel="stylesheet"
+          href="~/Webwedd.styles.css"
+          asp-append-version="true" />
+
+</head>
+
+
+<body>
+
+    <main>
+        @RenderBody()
+    </main>
+
+
+    <!-- JavaScript -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+            
+    <script src="~/js/wedding.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

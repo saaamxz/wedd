@@ -1,0 +1,292 @@
+﻿
+@model IEnumerable<Webwedd.Models.RSVP>
+
+@{
+    ViewData["Title"] = "RSVP Dashboard";
+
+    var totalGuests = Model.Sum(x => x.GuestCount);
+    var attending = Model.Count(x => x.Attendance == "Yes");
+    var notAttending = Model.Count(x => x.Attendance != "Yes");
+}
+
+<div class="admin-page">
+
+    <div class="admin-container">
+
+        <!-- HEADER -->
+        <div class="admin-header">
+
+            <div>
+                <span class="admin-label">
+                    WEDDING MANAGEMENT
+                </span>
+
+                <h1>
+                    RSVP Dashboard
+                </h1>
+
+                <p>
+                    Manage your wedding guest responses.
+                </p>
+            </div>
+
+           
+            <div class="admin-actions">
+
+                <a href="/" class="back-button">
+                    ← View Invitation
+                </a>
+
+                <form asp-action="Logout"
+                      asp-controller="Admin"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="logout-button">
+                        Logout
+                    </button>
+
+                </form>
+
+            </div>
+           
+
+
+        </div>
+
+
+        <!-- STATISTICS -->
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <span class="stat-icon">✦</span>
+
+                <div>
+                    <span class="stat-title">
+                        Total RSVPs
+                    </span>
+
+                    <strong>
+                        @Model.Count()
+                    </strong>
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <span class="stat-icon">♥</span>
+
+                <div>
+                    <span class="stat-title">
+                        Attending
+                    </span>
+
+                    <strong>
+                        @attending
+                    </strong>
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <span class="stat-icon">○</span>
+
+                <div>
+                    <span class="stat-title">
+                        Not Attending
+                    </span>
+
+                    <strong>
+                        @notAttending
+                    </strong>
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <span class="stat-icon">♙</span>
+
+                <div>
+                    <span class="stat-title">
+                        Total Guests
+                    </span>
+
+                    <strong>
+                        @totalGuests
+                    </strong>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- RSVP TABLE -->
+        <div class="rsvp-admin-card">
+
+            <div class="table-header">
+
+                <div>
+                    <h2>
+                        Guest Responses
+                    </h2>
+
+                    <p>
+                        All submitted RSVP responses
+                    </p>
+                </div>
+
+                <span class="response-count">
+                    @Model.Count() Responses
+                </span>
+
+            </div>
+
+
+            @if (!Model.Any())
+            {
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        ♡
+                    </div>
+
+                    <h3>
+                        No RSVPs yet
+                    </h3>
+
+                    <p>
+                        Guest responses will appear here
+                        when someone submits the RSVP form.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-wrapper">
+
+                    <table class="rsvp-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Guest</th>
+                                <th>Guests</th>
+                                <th>Attendance</th>
+                                <th>Message</th>
+                                <th>Submitted</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var rsvp in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <div class="guest-cell">
+
+                                            <div class="guest-avatar">
+                                                @rsvp.GuestName
+                                                .Substring(
+                                                0,
+                                                1
+                                                )
+                                                .ToUpper()
+                                            </div>
+
+                                            <span>
+                                                @rsvp.GuestName
+                                            </span>
+
+                                        </div>
+                                    </td>
+
+
+                                    <td>
+                                        <span class="guest-number">
+                                            @rsvp.GuestCount
+                                        </span>
+                                    </td>
+
+
+                                    <td>
+
+                                        @if (rsvp.Attendance == "Yes")
+                                        {
+                                            <span class="status attending">
+                                                ✓ Attending
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status not-attending">
+                                                × Not Attending
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <td>
+                                        <span class="message-cell">
+                                            @(string.IsNullOrWhiteSpace(
+                                                rsvp.GuestMessage)
+                                                ? "—"
+                                                : rsvp.GuestMessage)
+                                        </span>
+                                    </td>
+
+
+                                    <td>
+                                        <span class="date-cell">
+                                            @rsvp.SubmittedAt.ToString(
+                                                "dd MMM yyyy, hh:mm tt")
+                                        </span>
+                                    </td>
+
+
+                                    <td>
+
+                                        <form asp-action="Delete"
+                                              asp-controller="Admin"
+                                              method="post"
+                                              onsubmit="return confirm('Are you sure you want to delete this RSVP?');">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@rsvp.Id" />
+
+                                            <button type="submit"
+                                                    class="delete-button">
+
+                                                Delete
+
+                                            </button>
+
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
